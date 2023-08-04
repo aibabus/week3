@@ -3,7 +3,8 @@ import java.sql.*;
 public class ShopJDBC {
     public static void main(String[] args) {
         ShopJDBC project = new ShopJDBC();
-        project.addData(8,"Bekish", "Shmeks", "lolipop@gmail.com", "ololo 12");
+        //project.addData(8,"Bekish", "Shmeks", "lolipop@gmail.com", "ololo 12");
+        project.selectDataFromCustomers();
     }
 
     Connection con;
@@ -24,6 +25,7 @@ public class ShopJDBC {
             if (rows > 6){
                 System.out.println("New user has been added");
             }
+            con.close();
         }catch(ClassNotFoundException ex){
 
         } catch (SQLException e) {
@@ -31,12 +33,28 @@ public class ShopJDBC {
         }
     }
 
-    void selectData(){
+    void selectDataFromCustomers(){
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Shop", "root", "asdfasd3");
             System.out.println("Connection done");
-            
+
+            String sql = "select * from customers";
+
+            Statement stmt = con.createStatement();
+            ResultSet result = stmt.executeQuery(sql);
+
+            while (result.next()){
+                int userId = result.getInt("customers_id");
+                String fristName = result.getString("first_name");
+                String lastName = result.getString("last_name");
+                String email = result.getString("email");
+                String address = result.getString("address");
+
+                System.out.println(userId + ", " + fristName + ", " + lastName + ", " + email + ", "+ address + ", ");
+            }
+            con.close();
+
         }catch(ClassNotFoundException ex){
 
         } catch (SQLException e) {
