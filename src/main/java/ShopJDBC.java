@@ -4,7 +4,9 @@ public class ShopJDBC {
     public static void main(String[] args) {
         ShopJDBC project = new ShopJDBC();
         //project.addData(8,"Bekish", "Shmeks", "lolipop@gmail.com", "ololo 12");
-        project.selectDataFromCustomers();
+        //project.selectDataFromCustomers();
+        //project.updateData("Nazaraliev", "Aiba");
+        //project.deleteData("Nikita");
     }
 
     Connection con;
@@ -62,4 +64,52 @@ public class ShopJDBC {
         }
     }
 
+
+    void updateData(String newLastName, String firstName){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Shop", "root", "asdfasd3");
+            System.out.println("Connection done");
+
+            String sql = "update customers set last_name = ? where first_name = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1,newLastName);
+            stmt.setString(2,firstName);
+
+            int rows = stmt.executeUpdate();
+
+            if(rows > 0){
+                System.out.println("Updated");
+            }
+
+
+
+            con.close();
+
+        }catch(ClassNotFoundException ex){
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    void deleteData(String firstName){
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            con = DriverManager.getConnection("jdbc:mysql://localhost:3306/Shop", "root", "asdfasd3");
+            System.out.println("Connection done");
+
+            String sql = "delete from customers where first_name = ?";
+            PreparedStatement stmt = con.prepareStatement(sql);
+            stmt.setString(1,firstName);
+            int rows = stmt.executeUpdate();
+
+            con.close();
+
+        }catch(ClassNotFoundException ex){
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
